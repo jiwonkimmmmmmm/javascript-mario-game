@@ -46,7 +46,7 @@ class Platform {
   constructor() {
     this.position = {
       x: 200,
-      y: 100,
+      y: 600,
     };
     this.width = 200;
     this.height = 20;
@@ -86,7 +86,7 @@ function animate() {
 
   // 플랫폼과 충돌 시
   if (
-    play.position.y + player.height <= platform.position.y &&
+    player.position.y + player.height <= platform.position.y &&
     player.position.y + player.height + player.velocity.y >=
       platform.position.y &&
     player.position.x + player.width >= platform.position.x &&
@@ -112,7 +112,7 @@ addEventListener("keydown", ({ keyCode }) => {
       break;
     case 87:
       console.log("up");
-      player.velocity.y -= 15;
+      player.velocity.y -= 20;
       break;
   }
 });
