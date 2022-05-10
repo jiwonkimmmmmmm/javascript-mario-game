@@ -58,26 +58,55 @@ class Platform {
   }
 }
 
+class GenericObject {
+  constructor({ x, y, image }) {
+    this.position = {
+      x,
+      y,
+    };
+
+    this.image = image;
+    this.width = image.width;
+    this.height = image.height;
+  }
+
+  draw() {
+    c.drawImage(this.image, this.position.x, this.position.y);
+  }
+}
+
 const player = new Player();
 
-function createPlatFormImage() {
+function createImage(src) {
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.onload = () => resolve(image);
     image.onerror = reject;
-    image.src = "./static/images/platform.png";
+    image.src = src;
   });
 }
 
-const image = await createPlatFormImage();
+const plateFormImage = await createImage("./static/images/platform.png");
+const backgroundImage = await createImage("./static/images/background.png");
+const hillsImage = await createImage("./static/images/hills.png");
 
 const platforms = [
-  new Platform({ x: -1, y: 470, image }),
-  new Platform({ x: image.width - 3, y: 470, image }),
+  new Platform({ x: -1, y: 470, image: plateFormImage }),
+  new Platform({ x: plateFormImage.width - 3, y: 470, image: plateFormImage }),
 ];
 
-console.log(image);
-console.log(image.width);
+const genericObjects = [
+  new GenericObject({
+    x: -1,
+    y: -1,
+    image: backgroundImage,
+  }),
+  new GenericObject({
+    x: -1,
+    y: -1,
+    image: hillsImage,
+  }),
+];
 
 const keys = {
   right: {
@@ -95,6 +124,9 @@ function animate() {
 
   c.fillStyle = "white";
   c.fillRect(0, 0, canvas.width, canvas.height);
+  genericObjects.forEach((genericObject) => {
+    genericObject.draw();
+  });
   platforms.forEach((platform) => {
     platform.draw();
   });
@@ -112,10 +144,16 @@ function animate() {
       platforms.forEach((platform) => {
         platform.position.x -= 5;
       });
+      genericObjects.forEach((genericObject) => {
+        genericObject.position.x -= 3;
+      });
     } else if (keys.left.pressed) {
       scrollOffset -= 5;
       platforms.forEach((platform) => {
         platform.position.x += 5;
+      });
+      genericObjects.forEach((genericObject) => {
+        genericObject.position.x += 3;
       });
     }
 
