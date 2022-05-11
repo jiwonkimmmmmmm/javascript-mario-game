@@ -90,12 +90,16 @@ const plateFormImage = await createImage("./static/images/platform.png");
 const backgroundImage = await createImage("./static/images/background.png");
 const hillsImage = await createImage("./static/images/hills.png");
 
-const platforms = [
+let platforms = [
   new Platform({ x: -1, y: 470, image: plateFormImage }),
-  new Platform({ x: plateFormImage.width - 3, y: 470, image: plateFormImage }),
+  new Platform({
+    x: plateFormImage.width + 150,
+    y: 470,
+    image: plateFormImage,
+  }),
 ];
 
-const genericObjects = [
+let genericObjects = [
   new GenericObject({
     x: -1,
     y: -1,
@@ -118,6 +122,41 @@ const keys = {
 };
 
 let scrollOffset = 0;
+
+function init() {
+  platforms = [
+    new Platform({ x: -1, y: 470, image: plateFormImage }),
+    new Platform({
+      x: plateFormImage.width + 150,
+      y: 470,
+      image: plateFormImage,
+    }),
+  ];
+
+  genericObjects = [
+    new GenericObject({
+      x: -1,
+      y: -1,
+      image: backgroundImage,
+    }),
+    new GenericObject({
+      x: -1,
+      y: -1,
+      image: hillsImage,
+    }),
+  ];
+
+  keys = {
+    right: {
+      pressed: false,
+    },
+    left: {
+      pressed: false,
+    },
+  };
+
+  scrollOffset = 0;
+}
 
 function animate() {
   requestAnimationFrame(animate);
@@ -157,8 +196,17 @@ function animate() {
       });
     }
 
+    // 승리 조건
     if (scrollOffset > 2000) {
-      console.log("you win");
+      console.log("game win");
+    }
+
+    // 패배 조건
+    console.log(`player.position.y : ${player.position.y}`);
+    console.log(`canvas.height : ${canvas.height}`);
+    if (player.position.y > canvas.height) {
+      console.log("game lose");
+      init();
     }
   }
 
