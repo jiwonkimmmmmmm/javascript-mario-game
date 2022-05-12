@@ -75,8 +75,6 @@ class GenericObject {
   }
 }
 
-const player = new Player();
-
 function createImage(src) {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -89,6 +87,8 @@ function createImage(src) {
 const plateFormImage = await createImage("./static/images/platform.png");
 const backgroundImage = await createImage("./static/images/background.png");
 const hillsImage = await createImage("./static/images/hills.png");
+
+let player = new Player();
 
 let platforms = [
   new Platform({ x: -1, y: 470, image: plateFormImage }),
@@ -112,7 +112,7 @@ let genericObjects = [
   }),
 ];
 
-const keys = {
+let keys = {
   right: {
     pressed: false,
   },
@@ -124,6 +124,11 @@ const keys = {
 let scrollOffset = 0;
 
 function init() {
+  // platforms = []
+  // platforms.push(new Platform({ x: -1, y: 470, image: plateFormImage }));
+  // platforms.push(new Platform({ x: -1, y: 470, image: plateFormImage }));
+  player = new Player();
+
   platforms = [
     new Platform({ x: -1, y: 470, image: plateFormImage }),
     new Platform({
@@ -146,14 +151,8 @@ function init() {
     }),
   ];
 
-  keys = {
-    right: {
-      pressed: false,
-    },
-    left: {
-      pressed: false,
-    },
-  };
+  keys.right.pressed = false;
+  keys.right.left = false;
 
   scrollOffset = 0;
 }
@@ -202,9 +201,7 @@ function animate() {
     }
 
     // 패배 조건
-    console.log(`player.position.y : ${player.position.y}`);
-    console.log(`canvas.height : ${canvas.height}`);
-    if (player.position.y > canvas.height) {
+    if (player.position.y + player.width > canvas.height) {
       console.log("game lose");
       init();
     }
