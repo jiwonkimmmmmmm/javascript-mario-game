@@ -6,7 +6,7 @@ canvas.height = 576;
 
 const c = canvas.getContext("2d");
 
-const gravity = 0.5;
+const gravity = 1;
 
 class Player {
   constructor() {
@@ -85,54 +85,56 @@ function createImage(src) {
 }
 
 const plateFormImage = await createImage("./static/images/platform.png");
+const plateFormSmallImage = await createImage(
+  "./static/images/platformSmallTall.png"
+);
 const backgroundImage = await createImage("./static/images/background.png");
 const hillsImage = await createImage("./static/images/hills.png");
 
 let player = new Player();
 
-let platforms = [
-  new Platform({ x: -1, y: 470, image: plateFormImage }),
-  new Platform({
-    x: plateFormImage.width + 150,
-    y: 470,
-    image: plateFormImage,
-  }),
-];
-
-let genericObjects = [
-  new GenericObject({
-    x: -1,
-    y: -1,
-    image: backgroundImage,
-  }),
-  new GenericObject({
-    x: -1,
-    y: -1,
-    image: hillsImage,
-  }),
-];
-
-let keys = {
-  right: {
-    pressed: false,
-  },
-  left: {
-    pressed: false,
-  },
-};
-
+let platforms = [];
+let genericObjects = [];
+let keys = {};
 let scrollOffset = 0;
 
 function init() {
-  // platforms = []
-  // platforms.push(new Platform({ x: -1, y: 470, image: plateFormImage }));
-  // platforms.push(new Platform({ x: -1, y: 470, image: plateFormImage }));
   player = new Player();
 
   platforms = [
+    new Platform({
+      x:
+        plateFormImage.width * 4 +
+        300 -
+        2 +
+        plateFormImage.width -
+        plateFormSmallImage.width,
+      y: 270,
+      image: plateFormSmallImage,
+    }),
     new Platform({ x: -1, y: 470, image: plateFormImage }),
     new Platform({
-      x: plateFormImage.width + 150,
+      x: plateFormImage.width - 3,
+      y: 470,
+      image: plateFormImage,
+    }),
+    new Platform({
+      x: plateFormImage.width * 2 + 100,
+      y: 470,
+      image: plateFormImage,
+    }),
+    new Platform({
+      x: plateFormImage.width * 3 + 300,
+      y: 470,
+      image: plateFormImage,
+    }),
+    new Platform({
+      x: plateFormImage.width * 4 + 300 - 2,
+      y: 470,
+      image: plateFormImage,
+    }),
+    new Platform({
+      x: plateFormImage.width * 5 + 700 - 2,
       y: 470,
       image: plateFormImage,
     }),
@@ -151,8 +153,14 @@ function init() {
     }),
   ];
 
-  keys.right.pressed = false;
-  keys.right.left = false;
+  keys = {
+    right: {
+      pressed: false,
+    },
+    left: {
+      pressed: false,
+    },
+  };
 
   scrollOffset = 0;
 }
@@ -262,4 +270,5 @@ addEventListener("keyup", ({ keyCode }) => {
   }
 });
 
+init();
 animate();
