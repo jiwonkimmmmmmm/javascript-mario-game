@@ -6,6 +6,31 @@ canvas.height = 576;
 
 const c = canvas.getContext("2d");
 
+function createImage(src) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = src;
+  });
+}
+
+const plateFormImage = await createImage("./static/images/platform.png");
+const plateFormSmallImage = await createImage(
+  "./static/images/platformSmallTall.png"
+);
+const backgroundImage = await createImage("./static/images/background.png");
+const hillsImage = await createImage("./static/images/hills.png");
+
+const spriteRunLeft = await createImage("./static/images/spriteRunLeft.png");
+const spriteRunRight = await createImage("./static/images/spriteRunRight.png");
+const spriteStandLeft = await createImage(
+  "./static/images/spriteStandLeft.png"
+);
+const spriteStandRight = await createImage(
+  "./static/images/spriteStandRight.png"
+);
+
 const gravity = 1;
 
 class Player {
@@ -21,11 +46,14 @@ class Player {
     this.width = 50;
     this.height = 50;
     this.speed = 5;
+
+    this.image = spriteRunRight;
   }
 
   draw() {
-    c.fillStyle = "red";
-    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    // c.fillStyle = "red";
+    // c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    c.drawImage(this.image, this.position.x, this.position.y);
   }
 
   update() {
@@ -75,22 +103,6 @@ class GenericObject {
     c.drawImage(this.image, this.position.x, this.position.y);
   }
 }
-
-function createImage(src) {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.onload = () => resolve(image);
-    image.onerror = reject;
-    image.src = src;
-  });
-}
-
-const plateFormImage = await createImage("./static/images/platform.png");
-const plateFormSmallImage = await createImage(
-  "./static/images/platformSmallTall.png"
-);
-const backgroundImage = await createImage("./static/images/background.png");
-const hillsImage = await createImage("./static/images/hills.png");
 
 let player = new Player();
 
