@@ -43,20 +43,31 @@ class Player {
       x: 0,
       y: 20,
     };
-    this.width = 50;
-    this.height = 50;
+    this.width = 66;
+    this.height = 150;
     this.speed = 5;
 
-    this.image = spriteRunRight;
+    this.image = spriteStandRight;
+    this.frames = 0;
   }
 
   draw() {
-    // c.fillStyle = "red";
-    // c.fillRect(this.position.x, this.position.y, this.width, this.height);
-    c.drawImage(this.image, this.position.x, this.position.y);
+    c.drawImage(
+      this.image,
+      177 * this.frames,
+      0,
+      177,
+      400,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
   }
 
   update() {
+    this.frames++;
+    if (this.frames > 20) this.frames = 0;
     this.draw();
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
