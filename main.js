@@ -52,14 +52,14 @@ class Player {
     this.sprites = {
       stand: {
         right: spriteStandRight,
-        left: spriteRunLeft,
+        left: spriteStandLeft,
         cropWidth: 177,
         width: 66,
       },
       run: {
         right: spriteRunRight,
         left: spriteRunLeft,
-        cropWidth: 340,
+        cropWidth: 341,
         width: 127.875,
       },
     };
@@ -259,17 +259,6 @@ function animate() {
         genericObject.position.x += player.speed * 0.66;
       });
     }
-
-    // 승리 조건
-    if (scrollOffset > 2000) {
-      console.log("game win");
-    }
-
-    // 패배 조건
-    if (player.position.y + player.height > canvas.height) {
-      console.log("game lose");
-      init();
-    }
   }
 
   // 플랫폼과 충돌 시
@@ -319,6 +308,17 @@ function animate() {
     player.currentCropWidth = player.sprites.stand.cropWidth;
     player.width = player.sprites.stand.width;
   }
+
+  // 승리 조건
+  if (scrollOffset > plateFormImage.width * 5 + 300 - 2) {
+    console.log("game win");
+  }
+
+  // 패배 조건
+  if (player.position.y + player.height > canvas.height) {
+    console.log("game lose");
+    init();
+  }
 }
 
 addEventListener("keydown", ({ keyCode }) => {
@@ -339,7 +339,7 @@ addEventListener("keydown", ({ keyCode }) => {
       break;
     case 87:
       console.log("up");
-      player.velocity.y -= 20;
+      player.velocity.y -= 25;
       break;
   }
 });
