@@ -1,7 +1,14 @@
 "use strict";
 
 export default class Player {
-  constructor() {
+  constructor(
+    canvas,
+    spriteRunLeft,
+    spriteRunRight,
+    spriteStandLeft,
+    spriteStandRight
+  ) {
+    this.canvas = canvas;
     this.position = {
       x: 100,
       y: 100,
@@ -33,10 +40,12 @@ export default class Player {
 
     this.currentSprite = this.sprites.stand.right;
     this.currentCropWidth = 177;
+
+    this.gravity = 1;
   }
 
   draw() {
-    c.drawImage(
+    this.canvas.drawImage(
       this.currentSprite,
       this.currentCropWidth * this.frames,
       0,

@@ -1,7 +1,8 @@
 "use strict";
 
 export default class GenericObject {
-  constructor({ x, y, image }) {
+  constructor({ canvas, x, y, image }) {
+    this.canvas = canvas;
     this.position = {
       x,
       y,
@@ -13,6 +14,6 @@ export default class GenericObject {
   }
 
   draw() {
-    c.drawImage(this.image, this.position.x, this.position.y);
+    this.canvas.drawImage(this.image, this.position.x, this.position.y);
   }
 }
