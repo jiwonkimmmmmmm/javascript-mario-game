@@ -129,4 +129,108 @@ export default class Game {
 
     this.scrollOffset = 0;
   }
+
+  animate = () => {
+    requestAnimationFrame(this.animate);
+
+    this.canvasContext.fillStyle = "white";
+    this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.genericObjects.forEach((genericObject) => {
+      genericObject.draw();
+    });
+    this.platforms.forEach((platform) => {
+      platform.draw();
+    });
+    this.player.update();
+
+    // 플레이어 x좌표 이동 설정
+    if (this.keys.right.pressed && this.player.position.x < 400) {
+      this.player.velocity.x = this.player.speed;
+    } else if (
+      (this.keys.left.pressed && this.player.position.x > 100) ||
+      (this.keys.left.pressed &&
+        this.scrollOffset === 0 &&
+        this.player.position.x > 0)
+    ) {
+      this.player.velocity.x = -this.player.speed;
+    } else {
+      this.player.velocity.x = 0;
+      if (this.keys.right.pressed) {
+        this.scrollOffset += this.player.speed;
+        this.platforms.forEach((platform) => {
+          platform.position.x -= this.player.speed;
+        });
+        this.genericObjects.forEach((genericObject) => {
+          genericObject.position.x -= this.player.speed * 0.66;
+        });
+      } else if (this.keys.left.pressed && this.scrollOffset > 0) {
+        this.scrollOffset -= this.player.speed;
+        this.platforms.forEach((platform) => {
+          platform.position.x += this.player.speed;
+        });
+        this.genericObjects.forEach((genericObject) => {
+          genericObject.position.x += this.player.speed * 0.66;
+        });
+      }
+    }
+
+    // 플랫폼과 충돌 시
+    this.platforms.forEach((platform) => {
+      if (
+        this.player.position.y + this.player.height <= platform.position.y &&
+        this.player.position.y + this.player.height + this.player.velocity.y >=
+          platform.position.y &&
+        this.player.position.x + this.player.width >= platform.position.x &&
+        this.player.position.x <= platform.position.x + platform.width
+      ) {
+        this.player.velocity.y = 0;
+      }
+    });
+
+    if (
+      this.keys.right.pressed &&
+      this.lastKey === "right" &&
+      this.player.currentSprite !== this.player.sprites.run.right
+    ) {
+      this.player.frames = 1;
+      this.player.currentSprite = this.player.sprites.run.right;
+      this.player.currentCropWidth = this.player.sprites.run.cropWidth;
+      this.player.width = this.player.sprites.run.width;
+    } else if (
+      this.keys.left.pressed &&
+      this.lastKey === "left" &&
+      this.player.currentSprite !== this.player.sprites.run.left
+    ) {
+      this.player.currentSprite = this.player.sprites.run.left;
+      this.player.currentCropWidth = this.player.sprites.run.cropWidth;
+      this.player.width = this.player.sprites.run.width;
+    } else if (
+      !this.keys.left.pressed &&
+      this.lastKey === "left" &&
+      this.player.currentSprite !== this.player.sprites.stand.left
+    ) {
+      this.player.currentSprite = this.player.sprites.stand.left;
+      this.player.currentCropWidth = this.player.sprites.stand.cropWidth;
+      this.player.width = this.player.sprites.stand.width;
+    } else if (
+      !this.keys.right.pressed &&
+      this.lastKey === "right" &&
+      this.player.currentSprite !== this.player.sprites.stand.right
+    ) {
+      this.player.currentSprite = this.player.sprites.stand.right;
+      this.player.currentCropWidth = this.player.sprites.stand.cropWidth;
+      this.player.width = this.player.sprites.stand.width;
+    }
+
+    // 승리 조건
+    if (this.scrollOffset > this.plateFormImage.width * 5 + 300 - 2) {
+      console.log("game win");
+    }
+
+    // 패배 조건
+    if (this.player.position.y + this.player.height > this.canvas.height) {
+      console.log("game lose");
+      this.init();
+    }
+  };
 }
