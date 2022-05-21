@@ -2,7 +2,7 @@
 
 import Player from "./player.js";
 import Platform from "./platform.js";
-import GenericObject from "./genericObject.js";
+import GenericObject from "./genericeObject.js";
 
 function createImage(src) {
   return new Promise((resolve, reject) => {
@@ -34,7 +34,7 @@ export default class Game {
     this.canvas = document.querySelector("canvas");
     this.canvas.width = 1024;
     this.canvas.height = 576;
-    this.canvasContext = canvas.getContext("2d");
+    this.canvasContext = this.canvas.getContext("2d");
 
     this.player = "";
     this.platforms = [];
@@ -60,11 +60,14 @@ export default class Game {
           break;
         case 68:
           console.log("right");
+          console.log(`this.player.velocity.y : ${this.player.velocity.y}`);
           this.keys.right.pressed = true;
           this.lastKey = "right";
           break;
         case 87:
           console.log("up");
+          console.log(this.player);
+          console.log(`this.player.velocity.y : ${this.player.velocity.y}`);
           this.player.velocity.y -= 25;
           break;
       }
@@ -96,12 +99,15 @@ export default class Game {
 
   init() {
     this.player = new Player(
+      this.canvas,
       this.canvasContext,
       spriteRunLeft,
       spriteRunRight,
       spriteStandLeft,
       spriteStandRight
     );
+
+    console.log(this.player.velocity);
 
     this.platforms = [
       new Platform({
@@ -180,8 +186,8 @@ export default class Game {
     this.scrollOffset = 0;
   }
 
-  animate = () => {
-    requestAnimationFrame(this.animate);
+  start = () => {
+    requestAnimationFrame(this.start);
 
     this.canvasContext.fillStyle = "white";
     this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -273,7 +279,7 @@ export default class Game {
     }
 
     // 승리 조건
-    if (this.scrollOffset > this.plateFormImage.width * 5 + 300 - 2) {
+    if (this.scrollOffset > plateFormImage.width * 5 + 300 - 2) {
       console.log("game win");
     }
 

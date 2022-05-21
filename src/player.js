@@ -3,15 +3,17 @@
 export default class Player {
   constructor(
     canvas,
+    canvasContenxt,
     spriteRunLeft,
     spriteRunRight,
     spriteStandLeft,
     spriteStandRight
   ) {
     this.canvas = canvas;
+    this.canvasContenxt = canvasContenxt;
     this.position = {
       x: 100,
-      y: 100,
+      y: 300,
     };
     this.velocity = {
       x: 0,
@@ -45,7 +47,7 @@ export default class Player {
   }
 
   draw() {
-    this.canvas.drawImage(
+    this.canvasContenxt.drawImage(
       this.currentSprite,
       this.currentCropWidth * this.frames,
       0,
@@ -78,8 +80,8 @@ export default class Player {
     this.position.y += this.velocity.y;
 
     // 가장 하단까지만 이동
-    if (this.position.y + this.height + this.velocity.y <= canvas.height) {
-      this.velocity.y += gravity;
+    if (this.position.y + this.height + this.velocity.y <= this.canvas.height) {
+      this.velocity.y += this.gravity;
     } else {
       this.velocity.y = 0;
     }
