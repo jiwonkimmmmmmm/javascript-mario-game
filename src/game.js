@@ -42,6 +42,56 @@ export default class Game {
     this.keys = {};
     this.scrollOffset = 0;
     this.lastKey = "";
+    this.addKeyDownEvent();
+    this.addKeyUpEvent();
+  }
+
+  addKeyDownEvent() {
+    addEventListener("keydown", ({ keyCode }) => {
+      console.log(keyCode);
+      switch (keyCode) {
+        case 65:
+          console.log("left");
+          this.keys.left.pressed = true;
+          this.lastKey = "left";
+          break;
+        case 83:
+          console.log("down");
+          break;
+        case 68:
+          console.log("right");
+          this.keys.right.pressed = true;
+          this.lastKey = "right";
+          break;
+        case 87:
+          console.log("up");
+          this.player.velocity.y -= 25;
+          break;
+      }
+    });
+  }
+
+  addKeyUpEvent() {
+    addEventListener("keyup", ({ keyCode }) => {
+      switch (keyCode) {
+        case 65:
+          console.log("left");
+          this.keys.left.pressed = false;
+          this.lastKey = "left";
+          break;
+        case 83:
+          console.log("down");
+          break;
+        case 68:
+          console.log("right");
+          this.keys.right.pressed = false;
+          this.lastKey = "right";
+          break;
+        case 87:
+          console.log("up");
+          break;
+      }
+    });
   }
 
   init() {
