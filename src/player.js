@@ -42,17 +42,19 @@ export default class Player {
 
     this.currentSprite = this.sprites.stand.right;
     this.currentCropWidth = 177;
+    this.currentCropHeight = 400;
 
     this.gravity = 1;
   }
 
   draw() {
+    // drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
     this.canvasContenxt.drawImage(
       this.currentSprite,
       this.currentCropWidth * this.frames,
       0,
       this.currentCropWidth,
-      400,
+      this.currentCropHeight,
       this.position.x,
       this.position.y,
       this.width,
@@ -61,6 +63,13 @@ export default class Player {
   }
 
   update() {
+    this.setFrames();
+    this.draw();
+    this.setPosition();
+    this.moveToBottom();
+  }
+
+  setFrames() {
     this.frames++;
     if (
       this.frames > 59 &&
@@ -75,10 +84,13 @@ export default class Player {
     ) {
       this.frames = 0;
     }
-    this.draw();
+  }
+  setPosition() {
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
+  }
 
+  moveToBottom() {
     // 가장 하단까지만 이동
     if (this.position.y + this.height + this.velocity.y <= this.canvas.height) {
       this.velocity.y += this.gravity;
