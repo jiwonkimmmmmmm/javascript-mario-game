@@ -42,6 +42,7 @@ export default class Game {
     this.keys = {};
     this.scrollOffset = 0;
     this.lastKey = "";
+    this.isUpkeyDown = false;
     this.addKeyDownEvent();
     this.addKeyUpEvent();
   }
@@ -60,14 +61,12 @@ export default class Game {
           break;
         case 68:
           console.log("right");
-          console.log(`this.player.velocity.y : ${this.player.velocity.y}`);
           this.keys.right.pressed = true;
           this.lastKey = "right";
           break;
         case 87:
+          if (this.player.velocity.y !== 0) return;
           console.log("up");
-          console.log(this.player);
-          console.log(`this.player.velocity.y : ${this.player.velocity.y}`);
           this.player.velocity.y -= 25;
           break;
       }
@@ -106,8 +105,6 @@ export default class Game {
       spriteStandLeft,
       spriteStandRight
     );
-
-    console.log(this.player.velocity);
 
     this.platforms = [
       new Platform({
@@ -188,6 +185,8 @@ export default class Game {
 
   start = () => {
     requestAnimationFrame(this.start);
+
+    // console.log(`this.player.velocity.y : ${this.player.velocity.y}`);
 
     this.canvasContext.fillStyle = "white";
     this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
